@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Car Dealership</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Car Dealership</h1>
+
+    <div class="search-section">
+
+        <input type="text" id="search-bar" placeholder="Search for cars">
+
+        <select id="category-select">
+            <option value="all">All Types</option>
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV</option>
+            <option value="sports">Sports</option>
+        </select>
+
+        <button type="submit"> Search </button>
+   
+    </div>
+
+    <div id="cars-container"></div>
+
+    <div class="sell-car-section">
+        <h2>Sell your Car!</h2>
+
+        <form id="add-car-form">
+
+            <div>
+                <label for="car-name">Car Name</label>
+                <input type="text" id="car-name" required minlength="3">
+                
+                <div class="error-message" id="name-error">Car name must be at least 3 characters</div>
+
+            </div>
+
+            <div>
+                <label for="car-category">Type</label>
+                <select id="car-category" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="sedan">Sedan</option>
+                    <option value="suv">SUV</option>
+                    <option value="sports">Sports</option>
+                </select>
+
+                <div class="error-message" id="category-error">Please select a type</div>
+
+            </div>
+
+            <div>
+                <label for="car-price">Price ($)</label>
+                <input type="number" id="car-price" required min="0.01">
+
+                <div class="error-message" id="price-error">Price must be greater than 0</div>
+            </div>
+
+            <div>
+                <label for="car-image-url">Image URL</label>
+                <input type="url" id="car-image-url">
+
+                <div class="error-message" id="image-error">Please enter a valid URL</div>
+            </div>
+
+            <div>
+                <label for="car-description">Description</label>
+                <textarea id="car-description" required minlength="10"></textarea>
+
+                <div class="error-message" id="description-error">Description must be at least 10 characters</div>
+            </div>
+
+
+            <button >Add Vehicle</button>
+
+
+        </form>
+    </div>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
