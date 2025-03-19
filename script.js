@@ -40,7 +40,7 @@ const carsForSale = [
         description: "made from authentic krabby patties"
     }
 ];
-
+// cache elements different ways 
 const carsContainer = document.getElementById('cars-container');
 const searchInput = document.getElementById('search-bar');
 const categorySelect = document.querySelector('#category-select');
@@ -52,13 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // apparently i needed to heave the search button inside the domconentloaded or else it wouldnt work sometimes. so weird man
     const searchButton = document.querySelector('.search-section button');
     searchButton.addEventListener('click', filterCars);
+
+    const form = document.getElementById('add-car-form');
+    form.addEventListener('submit', addCarForSale);
+
+
+
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(errormessage => errormessage.style.display = 'none');
 });
 
 function displayCars(carsArray) {
   
     carsContainer.innerHTML = ''
-
-
 
     if (carsArray.length === 0) {
         const noResultsMessage = document.createElement('p');
@@ -69,54 +75,45 @@ function displayCars(carsArray) {
     }
 
 
-    carsArray.forEach(car => {
-    
-        const carCard = document.createElement('div');
-        carCard.className = 'car-card';
+    const template = document.getElementById('car-card-template');
+// iterating over collection of elements to accomplish task. task being create new cars for sale 
+// clone node 
+   carsArray.forEach(car => {
+        const carCard = template.content.cloneNode(true);
         
 
-        const carImage = document.createElement('div');
-        carImage.className = 'car-image';
+// query selectors 
+        const carImage = carCard.querySelector('.car-image');
         carImage.style.backgroundImage = `url(${car.imageUrl})`;
-        
-      
-        const carName = document.createElement('h3');
-        carName.id = 'car-name';
+            
+        const carName = carCard.querySelector('.car-name-display');
         carName.textContent = car.name;
-        
-        const carType = document.createElement('div');
-        carType.id = 'car-type';
+
+              
+        const carType = carCard.querySelector('.car-type-display');
         carType.textContent = `Type: ${car.category}`;
         
- 
-        const carPrice = document.createElement('div');
-        carPrice.id = 'car-price';
+            
+        const carPrice = carCard.querySelector('.car-price-display');
         carPrice.textContent = `Price: $${car.price}`;
         
-
-        const carDescription = document.createElement('p');
-        carDescription.id = 'car-description';
+        const carDescription = carCard.querySelector('.car-description-display');
         carDescription.textContent = car.description;
         
-   
-        const contactButton = document.createElement('button');
-        contactButton.textContent = 'Contact for Info';
+            
+        const contactButton = carCard.querySelector('button');
         contactButton.addEventListener('click', () => {
             alert(`Contact us about the ${car.name}!`);
         });
-        
     
-        carCard.appendChild(carImage);
-        carCard.appendChild(carName);
-        carCard.appendChild(carType);
-        carCard.appendChild(carPrice);
-        carCard.appendChild(carDescription);
-        carCard.appendChild(contactButton);
-        
-        
-        carsContainer.appendChild(carCard);
+
+            // using appendchild to create new elements 
+            carsContainer.appendChild(carCard);
     });
 }
+
+
+
 
 function filterCars() {
 
@@ -149,10 +146,11 @@ function filterCars() {
     const filteredCars = carsForSale.filter(car => {
       
         const matchesSearch = car.name.toLowerCase().includes(searchTerm);
+        const matchesDesc = car.description.toLowerCase().includes(searchTerm);
         
         const matchesCategory = selectedCategory === 'all' || car.category === selectedCategory;
         
-        if (matchesSearch && matchesCategory) 
+        if ((matchesSearch || matchesDesc) && matchesCategory) 
         {
             return true;
         }
@@ -161,4 +159,77 @@ function filterCars() {
     });
 
     displayCars(filteredCars);
+}
+
+
+//event = clicked
+function addCarForSale(event)
+{
+    //am i supposed to do preventDefault() by itself? why does VS Code cross out the event part idk 
+
+    event.preventDefault()
+
+    const carName = document.getElementById('car-name').value;
+    const carCategory = document.getElementById('car-category').value;
+    const carPrice = document.getElementById('car-price').value;
+    const carImageUrl = document.getElementById('car-image-url').value;
+    const carDescription = document.getElementById('car-description').value;
+    
+    let isValid = true;
+// query selector all 
+    // Reset error messages before validation
+    document.querySelectorAll('.error-message').forEach(errormsg => errormsg.style.display = 'none');
+
+    if (carName.length < 3) {
+        document.getElementById('name-error').style.display = 'block'
+        isValid = false;
+    }
+
+    if (carPrice <= 0) {
+        document.getElementById('price-error').style.display = 'block';
+        isValid = false;
+    }
+
+    if ((carImageUrl) && !isValidUrl(carImageUrl)) {
+        document.getElementById('image-error').style.display = 'block';
+        isValid = false;
+    }
+
+    if (carDescription.length < 10) {
+        document.getElementById('description-error').style.display = 'block';
+        isValid = false;
+    }
+
+
+    if (isValid) {
+        
+        const maxId = carsForSale.reduce((max, car) => (car.id > max ? car.id : max), 0);
+        
+       
+        const newCar = {
+            id: maxId + 1, 
+            name: carName,
+            category: carCategory,
+            price: carPrice,
+            imageUrl: carImageUrl || "https://via.placeholder.com/300x200?text=No+Image", // Added fallback image
+            description: carDescription
+        };
+        
+        carsForSale.push(newCar);
+        displayCars(carsForSale);
+        
+        // Reset the form after successful submission
+        document.getElementById('add-car-form').reset();
+        
+        alert(`Your ${carName} has been added to the store! Good luck!`);
+    }
+}   
+//just fcopied this https://www.freecodecamp.org/news/how-to-validate-urls-in-javascript/ 
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (error) {
+        return false;
+    }
 }

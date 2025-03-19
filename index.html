@@ -38,7 +38,7 @@
                 <label for="car-name">Car Name</label>
                 <input type="text" id="car-name" required minlength="3">
                 
-                <div class="error-message" id="name-error">Car name must be at least 3 characters</div>
+                <div class="error-message" id="name-error">Car name must be at least 3 characters and no special characters</div>
 
             </div>
 
@@ -76,14 +76,23 @@
                 <div class="error-message" id="description-error">Description must be at least 10 characters</div>
             </div>
 
-
-            <button >Add Vehicle</button>
+            <!-- i tried adding an onclick here and it did not work out so had to do different arpproach >:(   onclick="addCarForSale()" had to add button type submit and use it that way -->
+            <button type="submit" id="add-car-button">Add Vehicle</button>
 
 
         </form>
     </div>
-
-
+<!--  USING THE HTML TEMPLATE THING  i was trying to figure out why enw cars werent working but i had conflicting names with this and the regular classes -->
+<template id="car-card-template">
+    <div class="car-card">
+        <div class="car-image"></div>
+        <h3 class="car-name-display"></h3>
+        <div class="car-type-display"></div>
+        <div class="car-price-display"></div>
+        <p class="car-description-display"></p>
+        <button>Contact for Info</button>
+    </div>
+</template>
 
     <script src="script.js"></script>
 </body>
