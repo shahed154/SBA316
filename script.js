@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // apparently i needed to heave the search button inside the domconentloaded or else it wouldnt work sometimes. so weird man
     const searchButton = document.querySelector('.search-section button');
     searchButton.addEventListener('click', filterCars);
-
+//this too
     const form = document.getElementById('add-car-form');
     form.addEventListener('submit', addCarForSale);
 
 
-
+// this as well. i  learned ur supposedd to put most of stuff like this on the dom content loaded function 
     const errorMessages = document.querySelectorAll('.error-message');
     errorMessages.forEach(errormessage => errormessage.style.display = 'none');
 });
@@ -79,7 +79,7 @@ function displayCars(carsArray) {
 // iterating over collection of elements to accomplish task. task being create new cars for sale 
 // clone node 
    carsArray.forEach(car => {
-        const carCard = template.content.cloneNode(true);
+        const carCard = template.content.cloneNode(true)
         
 
 // query selectors 
@@ -95,7 +95,7 @@ function displayCars(carsArray) {
         
             
         const carPrice = carCard.querySelector('.car-price-display');
-        carPrice.textContent = `Price: $${car.price}`;
+        carPrice.textContent = `Price: $${car.price}`
         
         const carDescription = carCard.querySelector('.car-description-display');
         carDescription.textContent = car.description;
@@ -146,7 +146,8 @@ function filterCars() {
     const filteredCars = carsForSale.filter(car => {
       
         const matchesSearch = car.name.toLowerCase().includes(searchTerm);
-        const matchesDesc = car.description.toLowerCase().includes(searchTerm);
+
+        const matchesDesc = car.description.toLowerCase().includes(searchTerm)
         
         const matchesCategory = selectedCategory === 'all' || car.category === selectedCategory;
         
@@ -169,11 +170,11 @@ function addCarForSale(event)
 
     event.preventDefault()
 
-    const carName = document.getElementById('car-name').value;
-    const carCategory = document.getElementById('car-category').value;
-    const carPrice = document.getElementById('car-price').value;
-    const carImageUrl = document.getElementById('car-image-url').value;
-    const carDescription = document.getElementById('car-description').value;
+    const carName = document.getElementById('car-name').value
+    const carCategory = document.getElementById('car-category').value
+    const carPrice = document.getElementById('car-price').value
+    const carImageUrl = document.getElementById('car-image-url').value
+    const carDescription = document.getElementById('car-description').value
     
     let isValid = true;
 // query selector all 
@@ -181,8 +182,16 @@ function addCarForSale(event)
     document.querySelectorAll('.error-message').forEach(errormsg => errormsg.style.display = 'none');
 
     if (carName.length < 3) {
-        document.getElementById('name-error').style.display = 'block'
+        ////// USING PARENTNODE - meeting the reqs or else i wouldve done the easy way like i did for the other ones below lol 
+        const nameInput = document.getElementById('car-name');
+        const parentDiv = nameInput.parentNode;
+
+        const errorMessage = parentDiv.lastElementChild
+
+        errorMessage.style.display = 'block';
         isValid = false;
+
+
     }
 
     if (carPrice <= 0) {
